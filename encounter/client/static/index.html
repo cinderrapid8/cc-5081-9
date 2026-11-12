@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>首领遭遇协调器 · 图形客户端</title>
+<style>
+  :root {
+    --bg: #0f1320;
+    --panel: #181d2e;
+    --panel-2: #202740;
+    --line: #2c3555;
+    --text: #e6e9f5;
+    --muted: #9aa3c0;
+    --accent: #6ea8fe;
+    --good: #57d18a;
+    --warn: #f0b35a;
+    --bad: #ef6f6f;
+    --phase: #b58cff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  header h1 { font-size: 18px; margin: 0; }
+  header .sub { color: var(--muted); font-size: 13px; }
+  main {
+    display: grid;
+    grid-template-columns: 320px 1fr 360px;
+    gap: 16px;
+    padding: 16px 24px;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .panel h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; }
+  .row .k { color: var(--muted); }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge.active { background: rgba(110,168,254,.18); color: var(--accent); }
+  .badge.victory { background: rgba(87,209,138,.18); color: var(--good); }
+  .badge.wipe { background: rgba(239,111,111,.18); color: var(--bad); }
+  .badge.idle { background: rgba(154,163,192,.18); color: var(--muted); }
+  .phase-badge { background: rgba(181,140,255,.18); color: var(--phase); }
+  .hpbar {
+    height: 10px;
+    background: var(--panel-2);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 4px 0 8px;
+  }
+  .hpbar > div { height: 100%; background: linear-gradient(90deg, var(--accent), var(--phase)); }
+  button {
+    width: 100%;
+    margin: 4px 0;
+    padding: 9px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    color: var(--text);
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+  }
+  button:hover { border-color: var(--accent); }
+  button.primary { background: rgba(110,168,254,.16); border-color: var(--accent); }
+  button.danger { background: rgba(239,111,111,.12); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .group-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 12px 0 4px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 4px;
+  }
+  select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    background: var(--panel-2);
+    color: var(--text);
+    border: 1px solid var(--line);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; }
+  .pill { font-size: 11px; padding: 1px 7px; border-radius: 999px; background: var(--panel-2); }
+  .pill.committed { color: var(--accent); }
+  .pill.completed { color: var(--good); }
+  .pill.cancelled, .pill.revoked, .pill.blocked { color: var(--warn); }
+  .transcript {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: 12px;
+    max-height: 260px;
+    overflow: auto;
+    background: var(--panel-2);
+    border-radius: 8px;
+    padding: 8px;
+    white-space: pre-wrap;
+  }
+  .toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: var(--bad);
+    color: #1a0d0d;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none;
+    max-width: 360px;
+  }
+  .muted { color: var(--muted); font-size: 12px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>首领遭遇协调器 · 图形客户端</h1>
+  <span class="sub">所有按钮均调用真实 PhaseCoordinator；阶段与占用位置实时取自协调器快照，无固定数据。</span>
+  <span class="sub" id="mode-label"></span>
+</header>
+
+<main>
+  <section class="panel" id="controls">
+    <h2>战斗演练控制</h2>
+    <button class="primary" onclick="post('/api/action', {kind:'start'})">开始 / 重开遭遇（start_encounter）</button>
+    <button class="danger" onclick="post('/api/reset')">团灭后复位（reset_after_wipe）</button>
+    <button onclick="post('/api/new')">全新会话（清空全部记录）</button>
+
+    <div class="group-label">推进时钟</div>
+    <div class="grid2">
+      <button onclick="post('/api/action', {kind:'wait', seconds:1})">等待 1s</button>
+      <button onclick="post('/api/action', {kind:'wait', seconds:3})">等待 3s</button>
+      <button onclick="post('/api/action', {kind:'wait', seconds:5})">等待 5s</button>
+      <button onclick="post('/api/action', {kind:'wait', seconds:10})">等待 10s</button>
+    </div>
+
+    <div class="group-label">首领伤害（手动触发阈值机制）</div>
+    <div class="grid2">
+      <button onclick="post('/api/action', {kind:'boss_damage', amount:200, actor:'player-2'})">首领 -200（80% 共享阈）</button>
+      <button onclick="post('/api/action', {kind:'boss_damage', amount:250, actor:'player-2'})">首领 -250（跨 60%）</button>
+      <button onclick="post('/api/action', {kind:'boss_damage', amount:450, actor:'player-2'})">首领 -450（大伤害）</button>
+      <button onclick="post('/api/action', {kind:'boss_damage', amount:560, actor:'player-2'})">首领 -560（连跨多阈）</button>
+      <button onclick="post('/api/action', {kind:'boss_damage', amount:1000, actor:'player-2'})">首领 -1000（直接胜利）</button>
+    </div>
+
+    <div class="group-label">可破坏目标</div>
+    <div class="grid2">
+      <button onclick="post('/api/action', {kind:'target_damage', target:'wardstone', amount:80, actor:'player-1'})">打护石 -80</button>
+      <button onclick="post('/api/action', {kind:'destroy', target:'wardstone', actor:'player-1'})">摧毁护石</button>
+      <button onclick="post('/api/action', {kind:'target_damage', target:'brazier', amount:60, actor:'player-2'})">打火盆 -60</button>
+      <button onclick="post('/api/action', {kind:'destroy', target:'brazier', actor:'player-2'})">摧毁火盆</button>
+    </div>
+
+    <div class="group-label">玩家 / 机制</div>
+    <div class="grid2">
+      <button onclick="post('/api/action', {kind:'interrupt', mechanic:'p1_channel', player:'player-3'})">打断虚空引导</button>
+      <button onclick="post('/api/action', {kind:'kill', player:'player-1'})">player-1 倒下</button>
+      <button onclick="post('/api/action', {kind:'kill', player:'player-2'})">player-2 倒下</button>
+      <button onclick="post('/api/action', {kind:'kill', player:'player-3'})">player-3 倒下（团灭）</button>
+    </div>
+
+    <div class="group-label">验收场景 / 失败回放</div>
+    <select id="file-select"></select>
+    <button onclick="openReplay()">在图形客户端打开所选场景</button>
+    <div class="grid2">
+      <button class="primary" onclick="post('/api/replay/step')">回放单步</button>
+      <button onclick="post('/api/replay/run')">回放全部</button>
+    </div>
+    <p class="muted" id="replay-info"></p>
+  </section>
+
+  <section class="panel">
+    <h2>实时遭遇状态（协调器快照）</h2>
+    <div id="state"></div>
+    <h2 style="margin-top:18px">占用位置 / 机制位置</h2>
+    <div id="occupancy"></div>
+    <h2 style="margin-top:18px">事件转录（最近 12 条）</h2>
+    <div class="transcript" id="transcript"></div>
+  </section>
+
+  <section class="panel">
+    <h2>机制实例记录</h2>
+    <div id="mechanics"></div>
+    <h2 style="margin-top:18px">最近原始事件</h2>
+    <div class="transcript" id="raw-events"></div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let toastTimer = null;
+function showError(message) {
+  const el = document.getElementById('toast');
+  el.textContent = message;
+  el.style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.style.display = 'none'; }, 5000);
+}
+
+async function post(route, body) {
+  const response = await fetch(route, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body || {})
+  });
+  const data = await response.json();
+  if (!response.ok) { showError(data.error || 'request failed'); return null; }
+  render(data);
+  return data;
+}
+
+function hpBar(hp, max) {
+  const pct = max > 0 ? Math.max(0, Math.round(hp / max * 100)) : 0;
+  return `<div class="hpbar"><div style="width:${pct}%"></div></div>`;
+}
+
+function render(s) {
+  document.getElementById('mode-label').textContent =
+    s.mode === 'replay' ? `回放模式：${s.replay_source}（${s.replay_cursor}/${s.replay_length}）` : '实时模式';
+  document.getElementById('replay-info').textContent =
+    s.mode === 'replay' ? `已执行 ${s.replay_cursor} / ${s.replay_length} 个动作` : '';
+
+  const phase = s.phase
+    ? `<span class="badge phase-badge">P${s.phase.index + 1} ${s.phase.phase_id} · ${s.phase.name}</span>`
+    : '<span class="muted">尚未进入阶段</span>';
+
+  const targets = s.targets.map(t => `
+    <div class="row"><span class="k">${t.name} (${t.target_id})</span>
+      <span>${t.destroyed ? '已摧毁' : t.hp + ' / ' + t.max_hp}</span></div>
+    ${t.destroyed ? '' : hpBar(t.hp, t.max_hp)}
+  `).join('');
+
+  document.getElementById('state').innerHTML = `
+    <div class="row"><span class="k">遭遇</span><span>${s.encounter_id}</span></div>
+    <div class="row"><span class="k">状态</span><span class="badge ${s.status}">${s.status}</span></div>
+    <div class="row"><span class="k">世代 generation</span><span>${s.generation}</span></div>
+    <div class="row"><span class="k">虚拟时间</span><span>${s.time.toFixed(1)}s</span></div>
+    <div class="row"><span class="k">当前阶段</span><span>${phase}</span></div>
+    <div class="row"><span class="k">存活玩家</span><span>${s.players.join(', ') || '（无）'}</span></div>
+    <div class="row"><span class="k">${s.boss.name}</span><span>${s.boss.hp} / ${s.boss.max_hp}</span></div>
+    ${hpBar(s.boss.hp, s.boss.max_hp)}
+    ${targets}
+  `;
+
+  const occRows = s.occupancy.length
+    ? s.occupancy.map(c => `<tr><td>${c.resource}</td><td><span class="pill">${c.owner}</span></td></tr>`).join('')
+    : '<tr><td colspan="2" class="muted">无占用（空集合）</td></tr>';
+  const active = s.active_mechanics.map(m => `
+    <tr><td>${m.name}<br><span class="muted">${m.mechanic_id} · ${m.phase_id}</span></td>
+    <td>${m.resources.join(', ')}${m.mutex_group ? '<br>mutex: ' + m.mutex_group : ''}</td></tr>
+  `).join('') || '<tr><td colspan="2" class="muted">无进行中的机制</td></tr>';
+  document.getElementById('occupancy').innerHTML = `
+    <table><thead><tr><th>资源 / 位置</th><th>持有者</th></tr></thead><tbody>${occRows}</tbody></table>
+    <table style="margin-top:10px"><thead><tr><th>进行中的机制</th><th>占用</th></tr></thead><tbody>${active}</tbody></table>
+  `;
+
+  const mechRows = s.mechanic_records.map(m => `
+    <tr><td>${m.mechanic_id}</td>
+    <td><span class="pill ${m.status}">${m.status}</span></td>
+    <td class="muted">${m.detail || ''}</td>
+    <td>gen ${m.generation}</td></tr>
+  `).join('') || '<tr><td colspan="4" class="muted">尚无机制记录</td></tr>';
+  document.getElementById('mechanics').innerHTML =
+    `<table><thead><tr><th>机制</th><th>状态</th><th>原因</th><th>世代</th></tr></thead><tbody>${mechRows}</tbody></table>`;
+
+  document.getElementById('transcript').textContent = s.transcript_tail.join('\n');
+  document.getElementById('raw-events').textContent =
+    s.last_events.map(e => `#${e.seq} t=${e.time} ${e.type} ${JSON.stringify(e.payload)}`).join('\n');
+}
+
+async function openReplay() {
+  const select = document.getElementById('file-select');
+  if (!select.value) { showError('请先选择场景或回放文件'); return; }
+  await post('/api/replay/open', {file: select.value});
+}
+
+async function loadFiles() {
+  const response = await fetch('/api/files');
+  const data = await response.json();
+  const select = document.getElementById('file-select');
+  const options = [];
+  for (const f of data.failures) options.push(`failures/${f}`);
+  for (const f of data.scenarios) options.push(`scenarios/${f}`);
+  select.innerHTML = options.length
+    ? options.map(o => `<option value="${o.split('/').pop()}">${o}</option>`).join('')
+    : '<option value="">（先运行验收套件生成场景）</option>';
+}
+
+async function refresh() {
+  const response = await fetch('/api/state');
+  render(await response.json());
+}
+
+loadFiles();
+refresh();
+setInterval(refresh, 4000);
+</script>
+</body>
+</html>

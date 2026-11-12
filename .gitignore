@@ -23,3 +23,5 @@ __pycache__/
 *.log
 .env
 .env.*
+# Generated acceptance artifacts: scenarios, mutation/failure replays, ledger
+acceptance_output/
