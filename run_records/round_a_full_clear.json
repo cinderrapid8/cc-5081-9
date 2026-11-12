@@ -1,0 +1,665 @@
+{
+  "encounter_id": "overlord-rehearsal",
+  "generation": 1,
+  "final_status": "victory",
+  "event_count": 34,
+  "phase_timeline": [
+    {
+      "time": 0.0,
+      "phase_id": "p1",
+      "index": 0
+    },
+    {
+      "time": 9.0,
+      "phase_id": "p2",
+      "index": 1
+    },
+    {
+      "time": 20.0,
+      "phase_id": "p3",
+      "index": 2
+    }
+  ],
+  "mechanic_timeline": [
+    {
+      "time": 3.0,
+      "type": "mechanic_start",
+      "mechanic_id": "p1_seal",
+      "name": "Seal the Brazier",
+      "phase_id": "p1",
+      "trigger": "hp_threshold",
+      "resources": [
+        "object:brazier",
+        "position:center"
+      ],
+      "mutex_group": "center_control",
+      "duration": 12,
+      "cross_phase": "continue",
+      "generation": 1
+    },
+    {
+      "time": 3.0,
+      "type": "mechanic_blocked",
+      "mechanic_id": "p1_surge",
+      "name": "Mana Surge",
+      "reason": "resource_busy",
+      "trigger": "hp_threshold",
+      "generation": 1,
+      "resource": "object:brazier",
+      "holder": "p1_seal"
+    },
+    {
+      "time": 6.0,
+      "type": "mechanic_start",
+      "mechanic_id": "p1_channel",
+      "name": "Void Channel",
+      "phase_id": "p1",
+      "trigger": "timer",
+      "resources": [
+        "position:north_dais"
+      ],
+      "mutex_group": null,
+      "duration": 10,
+      "cross_phase": "cancel",
+      "generation": 1
+    },
+    {
+      "time": 6.0,
+      "type": "mechanic_end",
+      "mechanic_id": "p1_channel",
+      "name": "Void Channel",
+      "outcome": "cancelled",
+      "reason": "interrupted",
+      "actor": "player-3",
+      "resources": [
+        "position:north_dais"
+      ],
+      "generation": 1
+    },
+    {
+      "time": 9.0,
+      "type": "mechanic_start",
+      "mechanic_id": "p1_pulse",
+      "name": "Reverberating Pulse",
+      "phase_id": "p1",
+      "trigger": "timer",
+      "resources": [
+        "position:west_ring"
+      ],
+      "mutex_group": null,
+      "duration": 2,
+      "cross_phase": "cancel",
+      "generation": 1
+    },
+    {
+      "time": 9.0,
+      "type": "mechanic_start",
+      "mechanic_id": "p1_last_wrath",
+      "name": "Last Wrath",
+      "phase_id": "p1",
+      "trigger": "hp_threshold",
+      "resources": [
+        "position:east_ring"
+      ],
+      "mutex_group": null,
+      "duration": 6,
+      "cross_phase": "cancel",
+      "generation": 1
+    },
+    {
+      "time": 9.0,
+      "type": "mechanic_carried_over",
+      "mechanic_id": "p1_seal",
+      "from_phase": "p1",
+      "generation": 1
+    },
+    {
+      "time": 9.0,
+      "type": "mechanic_end",
+      "mechanic_id": "p1_pulse",
+      "name": "Reverberating Pulse",
+      "outcome": "cancelled",
+      "reason": "phase_change",
+      "actor": null,
+      "resources": [
+        "position:west_ring"
+      ],
+      "generation": 1
+    },
+    {
+      "time": 9.0,
+      "type": "mechanic_end",
+      "mechanic_id": "p1_last_wrath",
+      "name": "Last Wrath",
+      "outcome": "cancelled",
+      "reason": "phase_change",
+      "actor": null,
+      "resources": [
+        "position:east_ring"
+      ],
+      "generation": 1
+    },
+    {
+      "time": 13.0,
+      "type": "mechanic_start",
+      "mechanic_id": "p2_chain",
+      "name": "Soul Chain",
+      "phase_id": "p2",
+      "trigger": "timer",
+      "resources": [
+        "object:wardstone_anchor"
+      ],
+      "mutex_group": null,
+      "duration": 20,
+      "cross_phase": "continue",
+      "generation": 1
+    },
+    {
+      "time": 13.0,
+      "type": "mechanic_blocked",
+      "mechanic_id": "p2_cataclysm",
+      "name": "Cataclysm",
+      "reason": "resource_busy",
+      "trigger": "timer",
+      "generation": 1,
+      "resource": "position:center",
+      "holder": "p1_seal"
+    },
+    {
+      "time": 13.0,
+      "type": "mechanic_blocked",
+      "mechanic_id": "p2_burn",
+      "name": "Brazier Burn",
+      "reason": "resource_busy",
+      "trigger": "hp_threshold",
+      "generation": 1,
+      "resource": "object:brazier",
+      "holder": "p1_seal"
+    },
+    {
+      "time": 15.0,
+      "type": "mechanic_end",
+      "mechanic_id": "p1_seal",
+      "name": "Seal the Brazier",
+      "outcome": "completed",
+      "reason": "duration_elapsed",
+      "actor": null,
+      "resources": [
+        "object:brazier",
+        "position:center"
+      ],
+      "generation": 1
+    },
+    {
+      "time": 20.0,
+      "type": "mechanic_carried_over",
+      "mechanic_id": "p2_chain",
+      "from_phase": "p2",
+      "generation": 1
+    },
+    {
+      "time": 20.0,
+      "type": "mechanic_end",
+      "mechanic_id": "p2_chain",
+      "name": "Soul Chain",
+      "outcome": "cancelled",
+      "reason": "encounter_end",
+      "actor": null,
+      "resources": [
+        "object:wardstone_anchor"
+      ],
+      "generation": 1
+    }
+  ],
+  "events": [
+    {
+      "type": "encounter_start",
+      "time": 0.0,
+      "seq": 1,
+      "payload": {
+        "generation": 1,
+        "encounter_id": "overlord-rehearsal",
+        "players": [
+          "player-1",
+          "player-2",
+          "player-3"
+        ]
+      }
+    },
+    {
+      "type": "phase_enter",
+      "time": 0.0,
+      "seq": 2,
+      "payload": {
+        "phase_id": "p1",
+        "phase_name": "Opening Pressure",
+        "index": 0,
+        "generation": 1
+      }
+    },
+    {
+      "type": "damage",
+      "time": 3.0,
+      "seq": 3,
+      "payload": {
+        "target": "boss-overlord",
+        "amount": 200,
+        "source": "player-2",
+        "hp_before": 1000.0,
+        "hp_after": 800.0
+      }
+    },
+    {
+      "type": "mechanic_start",
+      "time": 3.0,
+      "seq": 4,
+      "payload": {
+        "mechanic_id": "p1_seal",
+        "name": "Seal the Brazier",
+        "phase_id": "p1",
+        "trigger": "hp_threshold",
+        "resources": [
+          "object:brazier",
+          "position:center"
+        ],
+        "mutex_group": "center_control",
+        "duration": 12,
+        "cross_phase": "continue",
+        "generation": 1
+      }
+    },
+    {
+      "type": "mechanic_blocked",
+      "time": 3.0,
+      "seq": 5,
+      "payload": {
+        "mechanic_id": "p1_surge",
+        "name": "Mana Surge",
+        "reason": "resource_busy",
+        "trigger": "hp_threshold",
+        "generation": 1,
+        "resource": "object:brazier",
+        "holder": "p1_seal"
+      }
+    },
+    {
+      "type": "mechanic_start",
+      "time": 6.0,
+      "seq": 6,
+      "payload": {
+        "mechanic_id": "p1_channel",
+        "name": "Void Channel",
+        "phase_id": "p1",
+        "trigger": "timer",
+        "resources": [
+          "position:north_dais"
+        ],
+        "mutex_group": null,
+        "duration": 10,
+        "cross_phase": "cancel",
+        "generation": 1
+      }
+    },
+    {
+      "type": "mechanic_end",
+      "time": 6.0,
+      "seq": 7,
+      "payload": {
+        "mechanic_id": "p1_channel",
+        "name": "Void Channel",
+        "outcome": "cancelled",
+        "reason": "interrupted",
+        "actor": "player-3",
+        "resources": [
+          "position:north_dais"
+        ],
+        "generation": 1
+      }
+    },
+    {
+      "type": "interrupt_rejected",
+      "time": 6.0,
+      "seq": 8,
+      "payload": {
+        "mechanic_id": "p1_surge",
+        "player": "player-1",
+        "reason": "not_active"
+      }
+    },
+    {
+      "type": "mechanic_start",
+      "time": 9.0,
+      "seq": 9,
+      "payload": {
+        "mechanic_id": "p1_pulse",
+        "name": "Reverberating Pulse",
+        "phase_id": "p1",
+        "trigger": "timer",
+        "resources": [
+          "position:west_ring"
+        ],
+        "mutex_group": null,
+        "duration": 2,
+        "cross_phase": "cancel",
+        "generation": 1
+      }
+    },
+    {
+      "type": "damage",
+      "time": 9.0,
+      "seq": 10,
+      "payload": {
+        "target": "boss-overlord",
+        "amount": 100,
+        "source": "player-2",
+        "hp_before": 800.0,
+        "hp_after": 700.0
+      }
+    },
+    {
+      "type": "damage",
+      "time": 9.0,
+      "seq": 11,
+      "payload": {
+        "target": "boss-overlord",
+        "amount": 100,
+        "source": "player-2",
+        "hp_before": 700.0,
+        "hp_after": 600.0
+      }
+    },
+    {
+      "type": "mechanic_start",
+      "time": 9.0,
+      "seq": 12,
+      "payload": {
+        "mechanic_id": "p1_last_wrath",
+        "name": "Last Wrath",
+        "phase_id": "p1",
+        "trigger": "hp_threshold",
+        "resources": [
+          "position:east_ring"
+        ],
+        "mutex_group": null,
+        "duration": 6,
+        "cross_phase": "cancel",
+        "generation": 1
+      }
+    },
+    {
+      "type": "damage",
+      "time": 9.0,
+      "seq": 13,
+      "payload": {
+        "target": "wardstone",
+        "amount": 200.0,
+        "source": "player-1",
+        "hp_before": 200.0,
+        "hp_after": 0.0
+      }
+    },
+    {
+      "type": "target_destroyed",
+      "time": 9.0,
+      "seq": 14,
+      "payload": {
+        "target": "wardstone",
+        "generation": 1
+      }
+    },
+    {
+      "type": "mechanic_carried_over",
+      "time": 9.0,
+      "seq": 15,
+      "payload": {
+        "mechanic_id": "p1_seal",
+        "from_phase": "p1",
+        "generation": 1
+      }
+    },
+    {
+      "type": "mechanic_end",
+      "time": 9.0,
+      "seq": 16,
+      "payload": {
+        "mechanic_id": "p1_pulse",
+        "name": "Reverberating Pulse",
+        "outcome": "cancelled",
+        "reason": "phase_change",
+        "actor": null,
+        "resources": [
+          "position:west_ring"
+        ],
+        "generation": 1
+      }
+    },
+    {
+      "type": "mechanic_end",
+      "time": 9.0,
+      "seq": 17,
+      "payload": {
+        "mechanic_id": "p1_last_wrath",
+        "name": "Last Wrath",
+        "outcome": "cancelled",
+        "reason": "phase_change",
+        "actor": null,
+        "resources": [
+          "position:east_ring"
+        ],
+        "generation": 1
+      }
+    },
+    {
+      "type": "phase_enter",
+      "time": 9.0,
+      "seq": 18,
+      "payload": {
+        "phase_id": "p2",
+        "phase_name": "Wardbreaker",
+        "index": 1,
+        "generation": 1
+      }
+    },
+    {
+      "type": "damage",
+      "time": 9.0,
+      "seq": 19,
+      "payload": {
+        "target": "brazier",
+        "amount": 60,
+        "source": "player-2",
+        "hp_before": 120.0,
+        "hp_after": 60.0
+      }
+    },
+    {
+      "type": "mechanic_start",
+      "time": 13.0,
+      "seq": 20,
+      "payload": {
+        "mechanic_id": "p2_chain",
+        "name": "Soul Chain",
+        "phase_id": "p2",
+        "trigger": "timer",
+        "resources": [
+          "object:wardstone_anchor"
+        ],
+        "mutex_group": null,
+        "duration": 20,
+        "cross_phase": "continue",
+        "generation": 1
+      }
+    },
+    {
+      "type": "mechanic_blocked",
+      "time": 13.0,
+      "seq": 21,
+      "payload": {
+        "mechanic_id": "p2_cataclysm",
+        "name": "Cataclysm",
+        "reason": "resource_busy",
+        "trigger": "timer",
+        "generation": 1,
+        "resource": "position:center",
+        "holder": "p1_seal"
+      }
+    },
+    {
+      "type": "damage",
+      "time": 13.0,
+      "seq": 22,
+      "payload": {
+        "target": "boss-overlord",
+        "amount": 150,
+        "source": "player-2",
+        "hp_before": 600.0,
+        "hp_after": 450.0
+      }
+    },
+    {
+      "type": "mechanic_blocked",
+      "time": 13.0,
+      "seq": 23,
+      "payload": {
+        "mechanic_id": "p2_burn",
+        "name": "Brazier Burn",
+        "reason": "resource_busy",
+        "trigger": "hp_threshold",
+        "generation": 1,
+        "resource": "object:brazier",
+        "holder": "p1_seal"
+      }
+    },
+    {
+      "type": "mechanic_end",
+      "time": 15.0,
+      "seq": 24,
+      "payload": {
+        "mechanic_id": "p1_seal",
+        "name": "Seal the Brazier",
+        "outcome": "completed",
+        "reason": "duration_elapsed",
+        "actor": null,
+        "resources": [
+          "object:brazier",
+          "position:center"
+        ],
+        "generation": 1
+      }
+    },
+    {
+      "type": "damage",
+      "time": 15.0,
+      "seq": 25,
+      "payload": {
+        "target": "brazier",
+        "amount": 60.0,
+        "source": "player-2",
+        "hp_before": 60.0,
+        "hp_after": 0.0
+      }
+    },
+    {
+      "type": "target_destroyed",
+      "time": 15.0,
+      "seq": 26,
+      "payload": {
+        "target": "brazier",
+        "generation": 1
+      }
+    },
+    {
+      "type": "damage",
+      "time": 20.0,
+      "seq": 27,
+      "payload": {
+        "target": "boss-overlord",
+        "amount": 100,
+        "source": "player-2",
+        "hp_before": 450.0,
+        "hp_after": 350.0
+      }
+    },
+    {
+      "type": "damage",
+      "time": 20.0,
+      "seq": 28,
+      "payload": {
+        "target": "boss-overlord",
+        "amount": 50,
+        "source": "player-2",
+        "hp_before": 350.0,
+        "hp_after": 300.0
+      }
+    },
+    {
+      "type": "mechanic_carried_over",
+      "time": 20.0,
+      "seq": 29,
+      "payload": {
+        "mechanic_id": "p2_chain",
+        "from_phase": "p2",
+        "generation": 1
+      }
+    },
+    {
+      "type": "phase_enter",
+      "time": 20.0,
+      "seq": 30,
+      "payload": {
+        "phase_id": "p3",
+        "phase_name": "Final Burn",
+        "index": 2,
+        "generation": 1
+      }
+    },
+    {
+      "type": "victory",
+      "time": 20.0,
+      "seq": 31,
+      "payload": {
+        "boss_hp": 300.0,
+        "generation": 1
+      }
+    },
+    {
+      "type": "timer_cancelled",
+      "time": 20.0,
+      "seq": 32,
+      "payload": {
+        "timer_id": 10,
+        "key": [
+          "mechanic_end",
+          "p2_chain"
+        ],
+        "reason": "encounter_end"
+      }
+    },
+    {
+      "type": "mechanic_end",
+      "time": 20.0,
+      "seq": 33,
+      "payload": {
+        "mechanic_id": "p2_chain",
+        "name": "Soul Chain",
+        "outcome": "cancelled",
+        "reason": "encounter_end",
+        "actor": null,
+        "resources": [
+          "object:wardstone_anchor"
+        ],
+        "generation": 1
+      }
+    },
+    {
+      "type": "round_clean",
+      "time": 20.0,
+      "seq": 34,
+      "payload": {
+        "generation": 1,
+        "claims": [],
+        "status": "victory"
+      }
+    }
+  ]
+}

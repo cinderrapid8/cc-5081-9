@@ -1,0 +1,380 @@
+{
+  "encounter_id": "overlord-rehearsal",
+  "generation": 2,
+  "final_status": "wipe",
+  "event_count": 20,
+  "phase_timeline": [
+    {
+      "time": 20.0,
+      "phase_id": "p1",
+      "index": 0
+    }
+  ],
+  "mechanic_timeline": [
+    {
+      "time": 20.0,
+      "type": "mechanic_start",
+      "mechanic_id": "p1_seal",
+      "name": "Seal the Brazier",
+      "phase_id": "p1",
+      "trigger": "hp_threshold",
+      "resources": [
+        "object:brazier",
+        "position:center"
+      ],
+      "mutex_group": "center_control",
+      "duration": 12,
+      "cross_phase": "continue",
+      "generation": 2
+    },
+    {
+      "time": 20.0,
+      "type": "mechanic_blocked",
+      "mechanic_id": "p1_surge",
+      "name": "Mana Surge",
+      "reason": "resource_busy",
+      "trigger": "hp_threshold",
+      "generation": 2,
+      "resource": "object:brazier",
+      "holder": "p1_seal"
+    },
+    {
+      "time": 22.0,
+      "type": "mechanic_start",
+      "mechanic_id": "p1_channel",
+      "name": "Void Channel",
+      "phase_id": "p1",
+      "trigger": "timer",
+      "resources": [
+        "position:north_dais"
+      ],
+      "mutex_group": null,
+      "duration": 10,
+      "cross_phase": "cancel",
+      "generation": 2
+    },
+    {
+      "time": 22.0,
+      "type": "mechanic_start",
+      "mechanic_id": "p1_pulse",
+      "name": "Reverberating Pulse",
+      "phase_id": "p1",
+      "trigger": "timer",
+      "resources": [
+        "position:west_ring"
+      ],
+      "mutex_group": null,
+      "duration": 2,
+      "cross_phase": "cancel",
+      "generation": 2
+    },
+    {
+      "time": 22.0,
+      "type": "mechanic_end",
+      "mechanic_id": "p1_seal",
+      "name": "Seal the Brazier",
+      "outcome": "cancelled",
+      "reason": "wipe",
+      "actor": null,
+      "resources": [
+        "object:brazier",
+        "position:center"
+      ],
+      "generation": 2
+    },
+    {
+      "time": 22.0,
+      "type": "mechanic_end",
+      "mechanic_id": "p1_channel",
+      "name": "Void Channel",
+      "outcome": "cancelled",
+      "reason": "wipe",
+      "actor": null,
+      "resources": [
+        "position:north_dais"
+      ],
+      "generation": 2
+    },
+    {
+      "time": 22.0,
+      "type": "mechanic_end",
+      "mechanic_id": "p1_pulse",
+      "name": "Reverberating Pulse",
+      "outcome": "cancelled",
+      "reason": "wipe",
+      "actor": null,
+      "resources": [
+        "position:west_ring"
+      ],
+      "generation": 2
+    }
+  ],
+  "events": [
+    {
+      "type": "encounter_start",
+      "time": 20.0,
+      "seq": 35,
+      "payload": {
+        "generation": 2,
+        "encounter_id": "overlord-rehearsal",
+        "players": [
+          "player-1",
+          "player-2",
+          "player-3"
+        ]
+      }
+    },
+    {
+      "type": "phase_enter",
+      "time": 20.0,
+      "seq": 36,
+      "payload": {
+        "phase_id": "p1",
+        "phase_name": "Opening Pressure",
+        "index": 0,
+        "generation": 2
+      }
+    },
+    {
+      "type": "damage",
+      "time": 20.0,
+      "seq": 37,
+      "payload": {
+        "target": "boss-overlord",
+        "amount": 200,
+        "source": "player-2",
+        "hp_before": 1000.0,
+        "hp_after": 800.0
+      }
+    },
+    {
+      "type": "mechanic_start",
+      "time": 20.0,
+      "seq": 38,
+      "payload": {
+        "mechanic_id": "p1_seal",
+        "name": "Seal the Brazier",
+        "phase_id": "p1",
+        "trigger": "hp_threshold",
+        "resources": [
+          "object:brazier",
+          "position:center"
+        ],
+        "mutex_group": "center_control",
+        "duration": 12,
+        "cross_phase": "continue",
+        "generation": 2
+      }
+    },
+    {
+      "type": "mechanic_blocked",
+      "time": 20.0,
+      "seq": 39,
+      "payload": {
+        "mechanic_id": "p1_surge",
+        "name": "Mana Surge",
+        "reason": "resource_busy",
+        "trigger": "hp_threshold",
+        "generation": 2,
+        "resource": "object:brazier",
+        "holder": "p1_seal"
+      }
+    },
+    {
+      "type": "mechanic_start",
+      "time": 22.0,
+      "seq": 40,
+      "payload": {
+        "mechanic_id": "p1_channel",
+        "name": "Void Channel",
+        "phase_id": "p1",
+        "trigger": "timer",
+        "resources": [
+          "position:north_dais"
+        ],
+        "mutex_group": null,
+        "duration": 10,
+        "cross_phase": "cancel",
+        "generation": 2
+      }
+    },
+    {
+      "type": "mechanic_start",
+      "time": 22.0,
+      "seq": 41,
+      "payload": {
+        "mechanic_id": "p1_pulse",
+        "name": "Reverberating Pulse",
+        "phase_id": "p1",
+        "trigger": "timer",
+        "resources": [
+          "position:west_ring"
+        ],
+        "mutex_group": null,
+        "duration": 2,
+        "cross_phase": "cancel",
+        "generation": 2
+      }
+    },
+    {
+      "type": "player_down",
+      "time": 22.0,
+      "seq": 42,
+      "payload": {
+        "player": "player-1",
+        "alive": [
+          "player-2",
+          "player-3"
+        ]
+      }
+    },
+    {
+      "type": "player_down",
+      "time": 22.0,
+      "seq": 43,
+      "payload": {
+        "player": "player-2",
+        "alive": [
+          "player-3"
+        ]
+      }
+    },
+    {
+      "type": "player_down",
+      "time": 22.0,
+      "seq": 44,
+      "payload": {
+        "player": "player-3",
+        "alive": []
+      }
+    },
+    {
+      "type": "wipe",
+      "time": 22.0,
+      "seq": 45,
+      "payload": {
+        "generation": 2
+      }
+    },
+    {
+      "type": "timer_cancelled",
+      "time": 22.0,
+      "seq": 46,
+      "payload": {
+        "timer_id": 16,
+        "key": [
+          "mechanic_end",
+          "p1_pulse"
+        ],
+        "reason": "wipe"
+      }
+    },
+    {
+      "type": "timer_cancelled",
+      "time": 22.0,
+      "seq": 47,
+      "payload": {
+        "timer_id": 14,
+        "key": [
+          "phase_timer",
+          "p1",
+          "p1_pulse"
+        ],
+        "reason": "wipe"
+      }
+    },
+    {
+      "type": "timer_cancelled",
+      "time": 22.0,
+      "seq": 48,
+      "payload": {
+        "timer_id": 13,
+        "key": [
+          "mechanic_end",
+          "p1_seal"
+        ],
+        "reason": "wipe"
+      }
+    },
+    {
+      "type": "timer_cancelled",
+      "time": 22.0,
+      "seq": 49,
+      "payload": {
+        "timer_id": 15,
+        "key": [
+          "mechanic_end",
+          "p1_channel"
+        ],
+        "reason": "wipe"
+      }
+    },
+    {
+      "type": "mechanic_end",
+      "time": 22.0,
+      "seq": 50,
+      "payload": {
+        "mechanic_id": "p1_seal",
+        "name": "Seal the Brazier",
+        "outcome": "cancelled",
+        "reason": "wipe",
+        "actor": null,
+        "resources": [
+          "object:brazier",
+          "position:center"
+        ],
+        "generation": 2
+      }
+    },
+    {
+      "type": "mechanic_end",
+      "time": 22.0,
+      "seq": 51,
+      "payload": {
+        "mechanic_id": "p1_channel",
+        "name": "Void Channel",
+        "outcome": "cancelled",
+        "reason": "wipe",
+        "actor": null,
+        "resources": [
+          "position:north_dais"
+        ],
+        "generation": 2
+      }
+    },
+    {
+      "type": "mechanic_end",
+      "time": 22.0,
+      "seq": 52,
+      "payload": {
+        "mechanic_id": "p1_pulse",
+        "name": "Reverberating Pulse",
+        "outcome": "cancelled",
+        "reason": "wipe",
+        "actor": null,
+        "resources": [
+          "position:west_ring"
+        ],
+        "generation": 2
+      }
+    },
+    {
+      "type": "round_clean",
+      "time": 22.0,
+      "seq": 53,
+      "payload": {
+        "generation": 2,
+        "claims": [],
+        "status": "wipe"
+      }
+    },
+    {
+      "type": "encounter_reset",
+      "time": 0.0,
+      "seq": 54,
+      "payload": {
+        "generation": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "encounter_id": "overlord-rehearsal",
+  "name": "The Overlord, Rehearsal Cut (JSON edition)",
+  "player_slots": 3,
+  "boss": {
+    "boss_id": "boss-overlord",
+    "name": "The Overlord",
+    "max_hp": 1000
+  },
+  "targets": [
+    {"target_id": "wardstone", "name": "Wardstone", "max_hp": 200},
+    {"target_id": "brazier", "name": "Soul Brazier", "max_hp": 120}
+  ],
+  "phases": [
+    {
+      "phase_id": "p1",
+      "name": "Opening Pressure",
+      "entry": [],
+      "mechanics": [
+        {
+          "mechanic_id": "p1_seal",
+          "name": "Seal the Brazier",
+          "trigger": "hp_threshold",
+          "value": 80,
+          "duration": 12,
+          "resources": ["object:brazier", "position:center"],
+          "mutex_group": "center_control",
+          "cross_phase": "continue",
+          "priority": 10
+        },
+        {
+          "mechanic_id": "p1_surge",
+          "name": "Mana Surge",
+          "trigger": "hp_threshold",
+          "value": 80,
+          "duration": 8,
+          "resources": ["object:brazier"],
+          "mutex_group": "center_control",
+          "priority": 20
+        },
+        {
+          "mechanic_id": "p1_channel",
+          "name": "Void Channel",
+          "trigger": "timer",
+          "value": 5,
+          "duration": 10,
+          "resources": ["position:north_dais"],
+          "interruptible": true
+        },
+        {
+          "mechanic_id": "p1_pulse",
+          "name": "Reverberating Pulse",
+          "trigger": "timer",
+          "value": 8,
+          "duration": 2,
+          "resources": ["position:west_ring"],
+          "repeat_interval": 8
+        },
+        {
+          "mechanic_id": "p1_last_wrath",
+          "name": "Last Wrath",
+          "trigger": "hp_threshold",
+          "value": 60,
+          "duration": 6,
+          "resources": ["position:east_ring"]
+        }
+      ]
+    },
+    {
+      "phase_id": "p2",
+      "name": "Wardbreaker",
+      "entry": [
+        {"kind": "hp_below", "ref": 60},
+        {"kind": "target_state", "ref": "wardstone", "state": "destroyed"}
+      ],
+      "mechanics": [
+        {
+          "mechanic_id": "p2_cataclysm",
+          "name": "Cataclysm",
+          "trigger": "timer",
+          "value": 10,
+          "duration": 6,
+          "resources": ["position:center"],
+          "mutex_group": "center_control"
+        },
+        {
+          "mechanic_id": "p2_chain",
+          "name": "Soul Chain",
+          "trigger": "timer",
+          "value": 4,
+          "duration": 20,
+          "resources": ["object:wardstone_anchor"],
+          "cross_phase": "continue"
+        },
+        {
+          "mechanic_id": "p2_burn",
+          "name": "Brazier Burn",
+          "trigger": "hp_threshold",
+          "value": 45,
+          "duration": 10,
+          "resources": ["object:brazier"],
+          "required_targets": ["brazier"]
+        }
+      ]
+    },
+    {
+      "phase_id": "p3",
+      "name": "Final Burn",
+      "entry": [{"kind": "hp_below", "ref": 30}],
+      "victory_phase": true,
+      "mechanics": [
+        {
+          "mechanic_id": "p3_despair",
+          "name": "Final Despair",
+          "trigger": "hp_threshold",
+          "value": 20,
+          "duration": 5,
+          "resources": ["position:center"],
+          "mutex_group": "center_control"
+        }
+      ]
+    }
+  ]
+}
